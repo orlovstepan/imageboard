@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <link rel="stylesheet" href="style.css" />
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Imageboard</title>
+    </head>
+    <body>
+        <h1>some text</h1>
+        <div id="main">
+            <h2 v-on:click="myFirstMethod">CLICK ME</h2>
+            <h2>Hello {{cohort}}</h2>
+            <h3>{{cohort ? "yes" : "no" }}</h3>
+            <h2 v-if="show">
+                I show up when the show property in the data object is set to a
+                truthy value
+            </h2>
+            <h2 v-else="show">
+                I show up when the showproperty in the data object is set to a
+                falsey value
+            </h2>
+            <h2>List of sweets</h2>
+            <ul v-for="(sweet, index) in sweets">
+                <li @click="mySecondMethod(sweet.emoji)" v-bind:key="sweet.id">
+                    {{index}} {{sweet.name}} | {{sweet.emoji}}
+                </li>
+            </ul>
+            <h3>
+                Third sweet in sweets array: {{sweets[2].name}} |
+                {{sweets[2].emoji}}
+            </h3>
+
+            <div v-if="showXmpl">
+                <h1>My user name is {{user.name}}</h1>
+                <ul v-for="(val, name) in user">
+                    <li>{{name}}: {{val}}</li>
+                </ul>
+
+                <h3>Emojis of {{user.name}}</h3>
+
+                <ul v-for="emojis in user.somethingElse">
+                    <li>{{emojis}}</li>
+                </ul>
+            </div>
+        </div>
+        <script src="/js/vue.js"></script>
+        <script src="/js/axios.min.js"></script>
+        <!-- order here matters, the link to our js file needs to come after vue and axios -->
+        <script src="/js/script.js"></script>
+    </body>
+</html>
