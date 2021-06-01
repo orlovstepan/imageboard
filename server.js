@@ -58,4 +58,12 @@ app.post("/upload", uploader.single("image"), s3.upload, (req, res) => {
     }
 });
 
+app.get("/imagedata/:id", (req, res) => {
+    // console.log(req.params);
+    db.getImageInfo(req.params.id).then((result) => {
+        console.log(result.rows[0]);
+        res.json(result.rows[0]);
+    });
+});
+
 app.listen(8080, () => console.log("imageboard is listening..."));

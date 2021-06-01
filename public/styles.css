@@ -1,5 +1,6 @@
 body {
     background-color: aliceblue;
+    z-index: 0;
 }
 
 #main {
@@ -19,4 +20,25 @@ img {
     height: 200px;
     margin: 5px;
     border-radius: 5px;
+}
+
+#test {
+    height: 100%;
+    width: 100%;
+    background-color: black;
+    opacity: 0.5;
+}
+
+.img-info {
+    z-index: 5;
+    background-color: black;
+    color: white;
+}
+
+#exit {
+    position: absolute;
+    margin-left: 90%;
+    margin-top: -6%;
+    font-size: 40px;
+    cursor: pointer;
 }
