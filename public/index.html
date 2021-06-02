@@ -21,36 +21,57 @@
     
             </div>
 
-            <some-component 
+            <img-modal 
             v-if="imageId" 
             :id = "imageId"
             @close = "closeMeInParent">
-        </some-component>
+        </img-modal>
 
         </header>
 
         
         <div class="card" v-for="image in images">
-            <img :src="image.url" @click="setImageId(image.id)">
-            <p>{{image.title}}</p>
+            <a :href=" '#' + image.id ">
+                <img :src="image.url">
+                <p>{{image.title}}</p>
+            </a>
         </div>
-        
+
+
+        <button id="more" @click="loadMoreImages"> more </button>     
+         
     </div>
     
-    <script id="some-component" type="text/x-template">
-    
-        <div class="img-info">
-            <h1 id="title">{{ title }}</h1>
-            <p id="exit" @click="closeInfo">X</p>
-            <img id="url" :src="url">
-            <h2 id="description">{{description}}</h2>
-            <p>Uploaded by {{username}} on {{created_at}}</p>
-
-        </div>
-        <comments-component></comments-component>
-
+    <script id="img-modal" type="text/x-template">
+        
+        
+            <div class="img-info">
+                <h1 id="title">{{ title }}</h1>
+                <p id="exit" @click="closeInfo">X</p>
+                <img id="url" :src="url">
+                <h2 id="description">{{description}}</h2>
+                <p>Uploaded by {{username}} on {{created_at}}</p>
+                <comments-component  :id = "id"></comments-component>
+            </div>
+        
 
     </script>
+    <script id="comments-component" type="text/x-template">
+
+        <div>
+
+        <input type="text" v-model="comment" id="input-comment" placeholder="Your comment">
+        <input type="text" v-model="username" id="input-username" placeholder="your name">
+        <button @click="handleSubmit">submit</button>
+
+        <div class="comments" v-for = "comment in comments">
+            <p>{{comment.username}} wrote "{{ comment.comment_text }}"</p>
+        </div>
+        
+        </div>
+
+    </script>
+
 
     <script src="/js/vue.js"></script>
     <script src="/js/axios.min.js"></script>

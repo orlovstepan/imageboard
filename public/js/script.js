@@ -1,6 +1,36 @@
 (function () {
-    Vue.component("some-component", {
-        template: "#some-component",
+    Vue.component("comments-component", {
+        template: "#comments-component",
+        props: ["id"],
+        data: function () {
+            return {
+                comments: [],
+                comment: "",
+                username: "",
+            };
+        },
+        mounted: function () {
+            axios.get("/comments/" + this.id).then((result) => {
+                console.log("result in comments", result);
+                this.comments = result.data;
+            });
+        },
+        methods: {
+            handleSubmit: function (e) {
+                axios
+                    .post("/comments/" + this.id, {
+                        comment: this.comment,
+                        username: this.username,
+                    })
+                    .then((resp) => {
+                        this.comments.push(resp.data);
+                    });
+            },
+        },
+    });
+
+    Vue.component("img-modal", {
+        template: "#img-modal",
         props: ["id"],
         data: function () {
             return {
@@ -39,7 +69,7 @@
             image: null,
             description: "",
             username: "",
-            imageId: null,
+            imageId: location.hash.slice(1),
         },
         mounted: function () {
             // console.log("vue mounted");
@@ -48,7 +78,22 @@
                 console.log("resp:", resp);
                 vueInstanceThis.images = resp.data;
             });
+
+            window.addEventListener("hashchange", () => {
+                // console.log("hashchange");
+
+                this.imageId = location.hash.slice(1);
+                console.log(this.imageId);
+            });
         },
+
+        watch: {
+            imageId: function () {
+                // console.log("imageId changed, this is the watcher reporting");
+                //we should do exactly the same that our mounted fumction is doing
+            },
+        },
+
         methods: {
             handleChange: function (e) {
                 this.image = e.target.files[0];
@@ -67,18 +112,26 @@
                     .post("/upload", data)
                     .then(function (result) {
                         console.log("final result", result);
-                        vueInstanceThis.images.push(result);
+                        vueInstanceThis.images.unshift(result.data);
                     })
                     .catch((e) => console.log("error in handlesubmit", e));
             },
 
             setImageId: function (id) {
                 this.imageId = id;
+                // @click="setImageId(image.id)" this used to be in html in the image tag
             },
 
             closeMeInParent: function () {
-                console.log("close me in parent running");
+                // console.log("close me in parent running");
                 this.imageId = null;
+                location.hash = "";
+            },
+
+            loadMoreImages: function (lowestid) {
+                axios
+                    .get(`/more/${lowestid}`)
+                    .catch((e) => console.log("error in loading more", e));
             },
         },
     });
