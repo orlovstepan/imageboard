@@ -88,8 +88,11 @@ app.post("/comments/:id", (req, res) => {
 });
 
 app.get("/more/:lowestid", (req, res) => {
+    console.log("lowestid", req.params);
+    // console.log("lowestid", req.params.lowestid);
     db.loadMoreImages(req.params.lowestid)
         .then(({ rows }) => {
+            console.log(rows);
             res.json(rows);
         })
         .catch((e) => console.log("error in db.loadmoreimages", e));

@@ -15,6 +15,16 @@
                 this.comments = result.data;
             });
         },
+
+        watch: {
+            imageId: function () {
+                axios.get("/comments/" + this.id).then((result) => {
+                    console.log("result in comments", result);
+                    this.comments = result.data;
+                });
+            },
+        },
+
         methods: {
             handleSubmit: function (e) {
                 axios
@@ -53,6 +63,17 @@
                 this.created_at = result.data.created_at;
             });
         },
+        watch: {
+            imageId: function () {
+                axios.get("/imagedata/" + this.id).then((result) => {
+                    this.description = result.data.description;
+                    this.title = result.data.title;
+                    this.url = result.data.url;
+                    this.username = result.data.username;
+                    this.created_at = result.data.created_at;
+                });
+            },
+        },
         methods: {
             closeInfo: function () {
                 console.log("about to emit close");
@@ -83,7 +104,7 @@
                 // console.log("hashchange");
 
                 this.imageId = location.hash.slice(1);
-                console.log(this.imageId);
+                // console.log(this.imageId);
             });
         },
 
@@ -91,6 +112,10 @@
             imageId: function () {
                 // console.log("imageId changed, this is the watcher reporting");
                 //we should do exactly the same that our mounted fumction is doing
+                axios.get("/images").then(function (resp) {
+                    console.log("resp:", resp);
+                    this.images = resp.data;
+                });
             },
         },
 
@@ -129,8 +154,15 @@
             },
 
             loadMoreImages: function (lowestid) {
+                const lastid = this.images[this.images.length - 1].id;
+
                 axios
-                    .get(`/more/${lowestid}`)
+                    .get(`/more/${lastid}`)
+                    .then((result) => {
+                        for (let i = 0; i < result.data.length; i++) {
+                            this.images.push(result.data[i]);
+                        }
+                    })
                     .catch((e) => console.log("error in loading more", e));
             },
         },
