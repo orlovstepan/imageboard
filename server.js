@@ -67,7 +67,10 @@ app.get("/imagedata/:id", (req, res) => {
             console.log(result.rows[0]);
             res.json(result.rows[0]);
         })
-        .catch((e) => console.log("error in getting imagedata", e));
+        .catch((e) => {
+            res.json();
+            console.log("error in getting imagedata", e);
+        });
 });
 
 app.get("/comments/:id", (req, res) => {
